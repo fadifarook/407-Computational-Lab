@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import time
 
 
 # Done due to issues in opening file in the same path
@@ -77,6 +78,38 @@ print("Two Pass Rel Error", (std_2(normalSequence2) - true_value2)/ true_value2)
 
 
 
+""" QUestion 1E"""
+
+def std_3(array):
+    
+    roundedvalue = round(array[0])
+    array -= roundedvalue
+
+
+    mean = np.mean(array)
+    temporary_value = np.sum(array**2)
+
+
+    # for i in range(len(array)):
+    #     temporary_value += array[i]**2
+
+
+    temporary_value -= len(array) * mean**2
+
+    if temporary_value < 0:
+        print("Negative Square Root")
+        temporary_value *= -1
+
+    
+    return np.sqrt(temporary_value / (len(array) - 1))
+
+
+
+print("Edited Rel Error", (std_3(normalSequence2) - true_value2)/ true_value2)
+
+
+
+
 
 
 print("""\n\nQuestion 2""")
@@ -88,6 +121,8 @@ def p(u):
 def q(u):
     return 1 - 8*u + 28*u**2 - 56*u**3 + 70*u**4 - 56*u**5 + 28*u**6 - 8*u**7 + u**8
 
+def xterms(u):
+    return np.array([0, -1, 8*u, -28*u**2, 56*u**3 , -70*u**4 , 56*u**5, -28*u**6, 8*u**7, -u**8])
 
 
 N = 500
@@ -100,15 +135,18 @@ plt.plot(u_array ,q(u_array), color='blue')  # noisier
 
 difference_array = p(u_array) - q(u_array)
 plt.plot(u_array, difference_array, color='green')
-# plt.hist(difference_array)
-# plt.show()
+plt.show()
+
+"""Plot histogram"""
+plt.hist(difference_array, 100)
+plt.show()
 
 C = 1e-16
 numTerms = 10
-terms = np.array([0, -1, 8, -28, 56, -70, 56, -28, 8, -1])
-lastTerm = np.mean(terms**2)
+terms = xterms(u=1)
+squaredTerms = np.mean(terms**2)
 print("Standard Deviation = ", np.std(difference_array))
-print("Calculated Standard Deviation = ", C * np.sqrt(numTerms) * np.sqrt(lastTerm))
+print("Calculated Standard Deviation = ", C * np.sqrt(numTerms) * np.sqrt(squaredTerms))
 
 
 
@@ -117,11 +155,12 @@ print("Calculated Standard Deviation = ", C * np.sqrt(numTerms) * np.sqrt(lastTe
 """2C"""
 u_array = np.linspace(0.980, 0.984, 50)
 plt.plot(u_array, abs(p(u_array) - q(u_array))/abs(p(u_array)))
-# plt.show()
+plt.show()
 
-print(np.mean(terms))
+nearTerms = xterms(u=0.983)
+squarednearTerms = np.mean(nearTerms**2)
 
-fractional_error = C * np.sqrt(lastTerm) / (np.sqrt(numTerms) * np.mean(terms))
+fractional_error = C * np.sqrt(squarednearTerms) / (np.sqrt(numTerms) * np.mean(nearTerms))
 
 print(fractional_error)
 
@@ -131,8 +170,18 @@ print(fractional_error)
 
 """ 2D """
 
+def func_multiply(u):
+    return (u**8)/((u**4)*(u**4))
+
+N = 500
+u_array = u_array = np.linspace(0.98, 1.02, N)
+
+plt.plot(u_array, func_multiply(u_array)-1.)
+plt.show()
 
 
+print("Standard Deviation: ", np.std(func_multiply(u_array)-1.))
+print("Caluclated STD: ", C)
 
 
 print("""\n\nQuestion 3""")
@@ -173,7 +222,22 @@ Nsimpson = 16  # number of slices
 a = 0
 b = 1
 
+start = time.time()
 trapzIntegral = trapz(f, a, b, Ntrapz)
+checkpoint = time.time() - start
 simpsonIntegral = simpson(f, a, b, Nsimpson)
-print("Trapezoid Rule Integral: ", trapzIntegral, "\t Error:", (np.pi - trapzIntegral))
-print("Simpson Rule Integral: ", simpsonIntegral, "\t Error:", (np.pi - simpsonIntegral))
+end = time.time() - checkpoint
+
+print("Trapezoid Rule Integral: ", trapzIntegral, "\t Error:", (np.pi - trapzIntegral), "\t Time: ", checkpoint)
+print("Simpson Rule Integral: ", simpsonIntegral, "\t Error:", (np.pi - simpsonIntegral), "\t Time: ", end)
+
+
+
+
+
+"""Practical Error Estimation"""
+print("\n")
+
+print("Error Estimation: ", (trapz(f, a, b, 32) - trapz(f, a, b, 16))/3)
+print("Error Estimation: ", (simpson(f, a, b, 32) - simpson(f, a, b, 16))/15)
+print("Error Estimation: ", (simpson(f, a, b, 64) - simpson(f, a, b, 32))/15)
