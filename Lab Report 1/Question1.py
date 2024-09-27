@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-import time
 
 
 print("Part B")
@@ -136,8 +135,11 @@ def xterms(u):
 N = 500
 u_array = np.linspace(0.98, 1.02, N)
 
-plt.plot(u_array ,p(u_array), color='red')
-plt.plot(u_array ,q(u_array), color='blue')  # noisier
+plt.plot(u_array ,p(u_array), color='#a8ddb5', label='p(u)')
+plt.plot(u_array ,q(u_array), color='#43a2ca', label='q(u)')  # noisier
+plt.xlabel('u value')
+plt.ylabel('Function Value')
+plt.legend()
 # plt.show()
 
 
