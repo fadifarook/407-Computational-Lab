@@ -47,10 +47,10 @@ plt.clf()
 
 
 """Plot histogram"""
-plt.hist(difference_array, bins=50)  # chose an arbitrary number of bins
+plt.hist(difference_array, bins=50, color='black')  # chose an arbitrary number of bins
 plt.title("Plot of histogram of p-u for u near 1")
-plt.xlabel('u value')
-plt.ylabel('Difference Value')
+plt.xlabel('Noise Value')
+plt.ylabel('Number of points')
 plt.savefig("Q2PartBHist")
 plt.clf()
 # plt.show()
@@ -82,7 +82,7 @@ print("\n\nPart C")
 
 # Plotting the fractional error from 0.980 to 0.984
 u_array = np.linspace(0.980, 0.984, 100)
-plt.plot(u_array, abs(p(u_array) - q(u_array))/abs(p(u_array)))
+plt.plot(u_array, abs(p(u_array) - q(u_array))/abs(p(u_array)), color='k')
 plt.xlabel("u value")
 plt.ylabel("Fractional Error")
 plt.title("Fractional error less than 1")
@@ -117,7 +117,7 @@ N = 500  # number of terms
 u_array = u_array = np.linspace(0.98, 1.02, N)
 
 # Plot f-1 near u=1
-plt.plot(u_array, func_multiply(u_array)-1.)
+plt.plot(u_array, func_multiply(u_array)-1., color='k')
 plt.xlabel("u value")
 plt.ylabel("f-1 value")
 plt.title("f-1 values near u=1")

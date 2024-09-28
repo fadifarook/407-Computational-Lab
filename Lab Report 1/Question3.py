@@ -69,7 +69,10 @@ simpsonIntegral = simpson(f, a, b, Nsimpson)
 end = time.time() - start  # time taken for simpson integral
 
 print("Trapezoid Rule Integral: ", trapzIntegral, "\t Error:", (np.pi - trapzIntegral), "\t Time: ", checkpoint, 's')
+print("Number of Slices: ", Ntrapz)
+print('')
 print("Simpson Rule Integral: ", simpsonIntegral, "\t Error:", (np.pi - simpsonIntegral), "\t Time: ", end, 's')
+print("Number of Slices: ", Nsimpson)
 
 
 
@@ -81,3 +84,5 @@ print("Simpson Rule Integral: ", simpsonIntegral, "\t Error:", (np.pi - simpsonI
 print("\n\nPart D")
 
 print("Error Estimation: ", (trapz(f, a, b, 32) - trapz(f, a, b, 16))/3)
+
+print('')
