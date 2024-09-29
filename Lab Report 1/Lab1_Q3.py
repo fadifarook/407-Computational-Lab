@@ -2,13 +2,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 
+
+"""This questions asks to integrate 4/1+x^2 from 0 to 1. I compare the real value pi
+to calculations using trapezoidal and simpsons rule of various number of slices.
+I also practically estimate the error of the trapezoidal rule"""
+
 def f(x):
     "Given equation to integrate"
     return 4 / (1+x**2)  # answer is Pi
 
 def trapz(func:callable, start, end, N):
     """Trapezoidal integration function"""
-    h = (end-start)/N
+    h = (end-start)/N  # size of slice
     s = (func(end) + func(start)) / 2
 
     for i in range(1, N):  # dont want i == 0
@@ -19,7 +24,7 @@ def trapz(func:callable, start, end, N):
 
 def simpson(func, start, end, N):
     "Simpson integration function"
-    h = (end-start)/N
+    h = (end-start)/N  # size of slice
     s = func(start) + func(end)
 
     for i in range(1, N):

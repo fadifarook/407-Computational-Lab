@@ -3,6 +3,14 @@ import matplotlib.pyplot as plt
 import os
 
 
+"""This question involved a comparison of errors when using two equations of finding standard
+deviation
+
+It takes data from cdata.txt or creates an array of normal values, and returns the standard deviation
+using multiple methods.
+"""
+
+
 print("Part B")
 
 def std_1(array):
