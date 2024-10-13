@@ -3,11 +3,17 @@ import scipy
 import matplotlib.pyplot as plt
 
 
-"""Central Numerical Differentiation"""
+"""Code that calculates the central and forward difference method of differentiation.
+Compares the two.
+
+Additionally, recursively calculates higher order derivatives using central difference method"""
 
 def f(x):
+    """Function to differentiate"""
     return np.exp(-x**2)
 
+
+# Define all the step sizes that incrementally increase by an order
 
 h_array = np.array([1e-16, 1e-15, 1e-14, 1e-13, 1e-12, 1e-11, 1e-10,
                     1e-9, 1e-8, 1e-7, 1e-6, 1e-5,
@@ -16,80 +22,86 @@ h_array = np.array([1e-16, 1e-15, 1e-14, 1e-13, 1e-12, 1e-11, 1e-10,
 
 
 def central_difference(func, x, h):
+    """Central Difference Formula"""
     return (func(x + h/2) - func(x - h/2)) / h
     
 def forward_difference(func, x, h):
+    """Forward Difference Formula"""
     return (func(x + h) - func(x)) / h
 
 
-"""Part A"""
+"""Part A,B,C: Compare Central and Forward Difference"""
 
-differential_array = np.zeros(len(h_array))
-fdifferential_array = np.zeros(len(h_array))
-x = 0.5
+central_difference_array = np.zeros(len(h_array))  # Initialize array to store central difference results
+forward_difference_array = np.zeros(len(h_array))  # Initialize array to store forward difference results
 
+x = 0.5  # point at which to differentiate
+
+"""Analytical value"""
+analyticalValue = (4* 0.5**2 - 2) * np.exp(-0.5**2)   # Analytical derivative of f(x) = e^(-x^2) at x = 0.5
+print(f"Analytical Derivative : {analyticalValue}")
+
+
+print("Calculated Derivative")
 for i in range(len(h_array)):
     h = h_array[i]
 
-    differential_array[i] = central_difference(f, x, h)
-    fdifferential_array[i] = forward_difference(f, x, h)
-    print(f"Differential at 1/2 for h = {h} is {differential_array[i]} or \t{fdifferential_array[i]}")
+    # Compute the derivative for each h
+    central_difference_array[i] = central_difference(f, x, h)
+    forward_difference_array[i] = forward_difference(f, x, h)
+
+    print(f"h = {h}: Central Difference = {central_difference_array[i]} \t Forward Difference = {forward_difference_array[i]}")
 
 
-"""Analytical value"""
-analyticalValue = (4* 0.5**2 - 2) * np.exp(-0.5**2)
-print(f"Analytical Value : {analyticalValue}")
+"""Finding the Relative error compared to the analytical value"""
 
-differential_relative_error = np.zeros(len(h_array))
-fdifferential_relative_error = np.zeros(len(h_array))
+central_relative_error = np.zeros(len(h_array))  # Initialize array for relative error of central difference
+forward_relative_error = np.zeros(len(h_array))  # Initialize array for relative error of forward difference
+
+central_relative_error = (central_difference_array - analyticalValue)/analyticalValue
+forward_relative_error = (forward_difference_array - analyticalValue)/analyticalValue
 
 print("\n\nRelative Error")
 for i in range(len(h_array)):
     h = h_array[i]
-    differential = differential_array[i]
-    fdifferential = fdifferential_array[i]
 
-    differential_relative_error[i] = (differential - analyticalValue)/analyticalValue
-    fdifferential_relative_error[i] = (fdifferential - analyticalValue)/analyticalValue
-
-    print(f"Relative error for h = {h} is {differential_relative_error[i]} or \t{fdifferential_relative_error[i]}")
-
-    # Best is 1e-5
+    print(f"h = {h}: Central Difference = {central_relative_error[i]} \t Forward Difference = {forward_relative_error[i]}")
 
 
 
 
 
-"""Part D : Plot the previous stuff in log plot"""
-# print(differential_relative_error, fdifferential_relative_error)
+"""Part D : Plot the relative error in log plot"""
 
-plt.plot(h_array, np.abs(differential_relative_error), label='Central')
-plt.plot(h_array, np.abs(fdifferential_relative_error), label='Forward')
+plt.plot(h_array, np.abs(central_relative_error), label='Central')
+plt.plot(h_array, np.abs(forward_relative_error), label='Forward')
 plt.xscale('log')
 plt.yscale('log')
 plt.xlabel('h')
 plt.legend()
-plt.show()
+plt.savefig("Lab2Q3D.png")
 
 
 
-"""Part F"""
+
+"""Part F: Investigate Higher Derivative"""
 def g(x):
-    # return np.exp(2*x)
+    """Function to test higher derivative"""
     return np.exp(2*x)
 
 
 def higher_derivative(func, x, m, h):
+    """Recursive calculation for higher-order derivatives, given in the question sheet"""
     if m > 1:
         return (higher_derivative(func, x + h/2, m - 1, h) - higher_derivative(func, x - h/2, m-1, h))/(h)
     else:
-        return central_difference(func, x, h)
+        return central_difference(func, x, h)  # Base case: use central difference for m=1
 
 
-h= 1e-6
-x = 0
+h= 1e-6  # step size
+x = 0  # Point to calculate the derivative
 
-print("First 5 derivatives")
+print("\n\nFirst 5 derivatives")
 for i in range(1, 6):
-    print(f"The derivative of order {i} is {higher_derivative(g, x, i, h)}")  # check with real value
+    print(f"The derivative of order {i} is {higher_derivative(g, x, i, h)}, expected value is {2.**(i)}")  # check with real value
 

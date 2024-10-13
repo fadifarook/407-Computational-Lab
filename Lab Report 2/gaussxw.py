@@ -1,13 +1,21 @@
-# %load gaussxw
 from pylab import *
 
+
+"""Code that defines functions used in Gaussian Quadrature integration calculation
+
+Contains gaussxw, and gaussxwab that provides x values and weights, that is lifted from
+lab exercises and textbook
+
+Also contins gaussianQuadrature, a function that I wrote to calculate the integral using
+the other two functions.
+"""
 
 def gaussxw(N):
 
     """Gaussian Quadrature helper function that returns the weights and
     corresponding x values between 0 and 1
     
-    Same function from class and textbook"""
+    Provided function from class and textbook"""
 
     # Initial approximation to roots of the Legendre polynomial
     a = linspace(3,4*N-1,N)/(4*N+2)
@@ -29,14 +37,14 @@ def gaussxw(N):
     # Calculate the weights
     w = 2*(N+1)*(N+1)/(N*N*(1-x*x)*dp*dp)
 
-    return x,w
+    return x,w  # returns the roots and weights
 
 def gaussxwab(N,a,b):
     """Converts the values gained from gaussxw function (0 to 1) 
     to different limits a to b"""
 
-    x,w = gaussxw(N)
-    return 0.5*(b-a)*x+0.5*(b+a),0.5*(b-a)*w  # formula for conversion
+    x,w = gaussxw(N)  # Retrieve Gaussian quadrature x values and weights
+    return 0.5*(b-a)*x+0.5*(b+a),0.5*(b-a)*w  # Transform the interval from [0,1] to [a,b]
 
 
 
@@ -46,11 +54,11 @@ def gaussianQuadrature(func, N, a, b, *params):
     
     *params is a placeholder for all the other parameters (in order) that is taken by the function"""
 
-    xp, wp = gaussxwab(N, a, b)  # retrieves the x values and weights from helper functions
+    xp, wp = gaussxwab(N, a, b)  # Retrieves the x values and weights from helper functions
 
-    s = 0.0  # integral value
+    s = 0.0  # Initialize integral value
 
     for  i in range(N):
         s += wp[i] * func(xp[i], *params)   # equation for guassian quadrature calculation
 
-    return xp, wp, s
+    return xp, wp, s  # Returns the x values, weights and computer integral value in a tuple

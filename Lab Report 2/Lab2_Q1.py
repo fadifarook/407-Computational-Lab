@@ -3,7 +3,7 @@ import scipy
 import matplotlib.pyplot as plt
 from gaussxw import gaussianQuadrature
 
-"""Code that calculated the wavefunction of a quantum harmonic oscillator. Plots the wavefunction
+"""Code that calculates the wavefunction of a quantum harmonic oscillator. Plots the wavefunction
 and calculates the associated potential.
 
 Imports the function gaussianQuadrature from gaussxw module I wrote. It calculates the integral and returns
