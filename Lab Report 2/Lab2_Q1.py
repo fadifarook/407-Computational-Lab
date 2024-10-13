@@ -50,7 +50,8 @@ for i in n_array:
     plt.plot(x_array, wavefunction(x_array, i), label=f'n = {i}')  # Plot wavefunction for each n
 
 plt.xlabel('x')
-plt.ylabel('Energy')
+plt.ylabel('Wavefunction Amplitude')
+plt.title("Wavefunction for Quantum Harmonic Oscillator")
 plt.legend()
 plt.savefig("Lab2Q1B.png")
 
@@ -80,6 +81,8 @@ n_array = np.arange(0, 11)  # Energy Levels
 # Generate the x and weight arrays for Gaussian quadrature once
 x_initial, w_initial = gaussxw(N)
 
+
+print("Part C: Position Squared and Potential")
 for n in n_array:
 
     integral_result = gaussianQuadrature(g_func, N, a, b, x_initial, w_initial, n)[2]  # Integral calculated for each n

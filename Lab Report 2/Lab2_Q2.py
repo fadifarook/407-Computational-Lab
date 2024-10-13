@@ -48,8 +48,9 @@ x16_initial, w16_initial = gaussxw(N2)
 xp8, wp8, s8 = gaussianQuadrature(T, N1, 0, x0, x8_initial, w8_initial ,k, m, x0)
 xp16, wp16, s16 = gaussianQuadrature(T, N2, 0, x0, x16_initial, w16_initial ,k, m, x0)
 
+print("\n\nPart A: Calculate Time Period")
 print(f"Time period integral with \t N = 8 : {s8} \t N = 16 {s16}")
-print(f"Estimated Fractional Error: = {s16-s8}")
+print(f"Estimated Fractional Error: = {(s16-s8)/s16}\n")
 
 
 """Part B: Plot integrand and weighted integrand"""
@@ -57,20 +58,23 @@ print(f"Estimated Fractional Error: = {s16-s8}")
 x_array = np.linspace(0, x0, 100)  # Generate near-continous points between 0 and x0
 
 # Plot the time period integrand T(x) as a function of x
-plt.plot(x_array, T(x_array, k, m, x0), label = 'T')
+plt.plot(x_array, T(x_array, k, m, x0))
+
 plt.legend()
 plt.xlabel("x value [m]")
-plt.ylabel("T [s]")
+plt.ylabel("$\\frac{4}{g_k}$ Value [s/m]")
+plt.title("Integrand Value over x")
 plt.savefig("Lab2Q2B1")
 plt.clf()
 
 # Plot the Gaussian quadrature points and corresponding weighted values for N = 8 and N = 16
-plt.scatter(xp8, wp8 * T(xp8, k, m, x0), label='8')
-plt.scatter(xp16, wp16 * T(xp16, k, m, x0), label='16')
+plt.scatter(xp8, wp8 * T(xp8, k, m, x0), label='N=8')
+plt.scatter(xp16, wp16 * T(xp16, k, m, x0), label='N=16')
 
 plt.legend()
 plt.xlabel("x value [m]")
-plt.ylabel("T [s]")
+plt.ylabel("$\\frac{4w_k}{g_k}$ Value [s]")
+plt.title("Weighted Values over x")
 plt.savefig("Lab2Q2B2")
 plt.clf()
 
@@ -101,5 +105,6 @@ plt.axhline(2*np.pi * np.sqrt(m/k), label='Classical Limit T = $2\pi \sqrt{m/k}$
 plt.plot(x0_array, 4*x0_array/c, label='Relativistic Limit T = 4$x_0$/c', color='r')  # Plots relativistic limit
 plt.ylabel("Time Period [s]")
 plt.xlabel("x0 value [m]")
+plt.title("Dependence of Time period on Amplitude $x_0$")
 plt.legend()
 plt.savefig("Lab2Q2C")

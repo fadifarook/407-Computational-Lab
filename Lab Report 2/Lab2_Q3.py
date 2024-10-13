@@ -79,6 +79,7 @@ plt.xscale('log')
 plt.yscale('log')
 plt.xlabel('Step Size h')
 plt.ylabel('Relative Error')
+plt.title("Comparison of Central Difference and Forward Difference Relative Error")
 plt.legend()
 plt.savefig("Lab2Q3D.png")
 
@@ -102,7 +103,7 @@ def higher_derivative(func, x, m, h):
 h= 1e-6  # step size
 x = 0  # Point to calculate the derivative
 
-print("\n\nFirst 5 derivatives")
+print("\n\nPart F: First 5 derivatives")
 for i in range(1, 6):
     print(f"The derivative of order {i} is {higher_derivative(g, x, i, h)}, expected value is {2.**(i)}")  # check with real value
 
