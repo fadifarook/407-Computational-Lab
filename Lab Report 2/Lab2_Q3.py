@@ -73,11 +73,12 @@ for i in range(len(h_array)):
 
 """Part D : Plot the relative error in log plot"""
 
-plt.plot(h_array, np.abs(central_relative_error), label='Central')
-plt.plot(h_array, np.abs(forward_relative_error), label='Forward')
+plt.scatter(h_array, np.abs(central_relative_error), label='Central Difference')
+plt.scatter(h_array, np.abs(forward_relative_error), label='Forward Difference')
 plt.xscale('log')
 plt.yscale('log')
-plt.xlabel('h')
+plt.xlabel('Step Size h')
+plt.ylabel('Relative Error')
 plt.legend()
 plt.savefig("Lab2Q3D.png")
 

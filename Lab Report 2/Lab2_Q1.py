@@ -1,13 +1,14 @@
 import numpy as np 
 import scipy
 import matplotlib.pyplot as plt
-from gaussxw import gaussianQuadrature
+from gaussxw import gaussianQuadrature, gaussxw
 
 """Code that calculates the wavefunction of a quantum harmonic oscillator. Plots the wavefunction
 and calculates the associated potential.
 
 Imports the function gaussianQuadrature from gaussxw module I wrote. It calculates the integral and returns
-xpoints, weightedpoints and integral in a tuple of that order """
+xpoints, weightedpoints and integral in a tuple of that order. It takes the 0 to 1 x points and weights calculated
+from the gaussxw function"""
 
 
 """Part A : Define Hermite Polynomial"""
@@ -76,9 +77,15 @@ N = 100  # Sample points for Gaussian Quadrature
 
 n_array = np.arange(0, 11)  # Energy Levels
 
+# Generate the x and weight arrays for Gaussian quadrature once
+x_initial, w_initial = gaussxw(N)
+
 for n in n_array:
 
-    integral_result = gaussianQuadrature(g_func, N, a, b, n)[2]  # Integral calculated for each n
+    integral_result = gaussianQuadrature(g_func, N, a, b, x_initial, w_initial, n)[2]  # Integral calculated for each n
+
+    # Note that this makes the same calculation converting from 0 to 1 -> a to b, but it is a minimal
+    # calculation that is fast.
 
     # Calculate potential
     potential = integral_result / 2

@@ -1,14 +1,14 @@
 import numpy as np 
 import scipy
 import matplotlib.pyplot as plt
-from gaussxw import gaussxwab, gaussianQuadrature
+from gaussxw import gaussxw, gaussianQuadrature
+
 
 """Code that calculates the time period of a relativistic particle on a spring.
 Also compares this to classical and relativistic limit.
 
 Imports the function gaussianQuadrature from gaussxw module I wrote. It calculates the integral and returns
 xpoints, weightedpoints and integral in a tuple of that order """
-
 
 
 
@@ -40,12 +40,16 @@ x0 = 0.01  # Maximum displacement [m]
 N1 = 8
 N2 = 16
 
+# Generate the x and weight arrays for Gaussian quadrature once
+x8_initial, w8_initial = gaussxw(N1)
+x16_initial, w16_initial = gaussxw(N2)
 
 # Perform Gaussian quadrature to calculate the time period integral for N1 and N2 points
-xp1, wp1, s1 = gaussianQuadrature(T, N1, 0, x0, k, m, x0)
-xp2, wp2, s2 = gaussianQuadrature(T, N2, 0, x0, k, m, x0)
+xp8, wp8, s8 = gaussianQuadrature(T, N1, 0, x0, x8_initial, w8_initial ,k, m, x0)
+xp16, wp16, s16 = gaussianQuadrature(T, N2, 0, x0, x16_initial, w16_initial ,k, m, x0)
 
-print(f"Time period integral with \t N = 8 : {s1} \t N = 16 {s2}")
+print(f"Time period integral with \t N = 8 : {s8} \t N = 16 {s16}")
+print(f"Estimated Fractional Error: = {s16-s8}")
 
 
 """Part B: Plot integrand and weighted integrand"""
@@ -54,13 +58,20 @@ x_array = np.linspace(0, x0, 100)  # Generate near-continous points between 0 an
 
 # Plot the time period integrand T(x) as a function of x
 plt.plot(x_array, T(x_array, k, m, x0), label = 'T')
+plt.legend()
+plt.xlabel("x value [m]")
+plt.ylabel("T [s]")
+plt.savefig("Lab2Q2B1")
+plt.clf()
 
 # Plot the Gaussian quadrature points and corresponding weighted values for N = 8 and N = 16
-plt.scatter(xp1, wp1 * T(xp1, k, m, x0), label='8')
-plt.scatter(xp2, wp2 * T(xp2, k, m, x0), label='16')
+plt.scatter(xp8, wp8 * T(xp8, k, m, x0), label='8')
+plt.scatter(xp16, wp16 * T(xp16, k, m, x0), label='16')
 
 plt.legend()
-plt.savefig("Lab2Q2B")
+plt.xlabel("x value [m]")
+plt.ylabel("T [s]")
+plt.savefig("Lab2Q2B2")
 plt.clf()
 
 
@@ -82,9 +93,13 @@ T_array = np.zeros(len(x0_array))  # Array to store time period results
 
 # Calculate the time period for each value of x0 in the array
 for i in range(len(x0_array)):
-    T_array[i] = gaussianQuadrature(T, N, 0, x0_array[i], k, m, x0_array[i])[2]
+    T_array[i] = gaussianQuadrature(T, N, 0, x0_array[i], x16_initial, w16_initial ,k, m, x0_array[i])[2]
+    # Reused x16 and w16 gaussian quadrature calculation from earlier
 
-plt.plot(x0_array, T_array)
-plt.axhline(2*np.pi * np.sqrt(m/k), color='green')  # Plots Classical Limit
-plt.plot(x0_array, 4*x0_array/c)  # Plots relativistic limit
+plt.plot(x0_array, T_array, label='Integral Calculation')
+plt.axhline(2*np.pi * np.sqrt(m/k), label='Classical Limit T = $2\pi \sqrt{m/k}$', color='k')  # Plots Classical Limit
+plt.plot(x0_array, 4*x0_array/c, label='Relativistic Limit T = 4$x_0$/c', color='r')  # Plots relativistic limit
+plt.ylabel("Time Period [s]")
+plt.xlabel("x0 value [m]")
+plt.legend()
 plt.savefig("Lab2Q2C")

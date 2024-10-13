@@ -39,22 +39,21 @@ def gaussxw(N):
 
     return x,w  # returns the roots and weights
 
-def gaussxwab(N,a,b):
+def gaussxwab(a,b, x_initial, w_initial):
     """Converts the values gained from gaussxw function (0 to 1) 
     to different limits a to b"""
 
-    x,w = gaussxw(N)  # Retrieve Gaussian quadrature x values and weights
-    return 0.5*(b-a)*x+0.5*(b+a),0.5*(b-a)*w  # Transform the interval from [0,1] to [a,b]
+    return 0.5*(b-a)*x_initial+0.5*(b+a),0.5*(b-a)*w_initial  # Transform the interval from [0,1] to [a,b]
 
 
 
-def gaussianQuadrature(func, N, a, b, *params):
+def gaussianQuadrature(func, N, a, b, x_initial, w_initial, *params):
     """Calculates the gaussian weights, x values and the integral when given
     the function, number of points N and two limits a,b
     
     *params is a placeholder for all the other parameters (in order) that is taken by the function"""
 
-    xp, wp = gaussxwab(N, a, b)  # Retrieves the x values and weights from helper functions
+    xp, wp = gaussxwab(a, b, x_initial, w_initial)  # Retrieves the x values and weights from helper functions
 
     s = 0.0  # Initialize integral value
 
