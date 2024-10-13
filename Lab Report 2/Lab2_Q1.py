@@ -41,6 +41,8 @@ def wavefunction(x, n):
 for i in n_array:
     plt.plot(x_array, wavefunction(x_array, i), label=f'n = {i}')
 
+plt.xlabel('x')
+plt.ylabel('Energy')
 plt.legend()
 plt.savefig("Lab2Q1B")
 
@@ -48,39 +50,50 @@ plt.savefig("Lab2Q1B")
 
 """Part C: Potential"""
 
-# Need to do a change of variables integral here and multiply by 2 for potential
+# Need to do a change of variables integral here and divide by 2 for potential
 
 
 def f_func(x, n):
-    """Function to integrate"""
-    return x**2 * np.abs(wavefunction(x, n))**2  / 2  # check if this is supposed to be np.abs
+    """Function to integrate in original x variable"""
+    return x**2 * np.abs(wavefunction(x, n))**2
+
+def g_func(z, n):
+    """After change of variables: z = x / (1 + x)"""
+    return f_func(np.tan(z), n) / np.cos(z)**2
+
+
+
+"""Integral bounds"""
+a, b = -np.pi/2, np.pi/2
+N = 100  # Total points for Gaussian Quadrature
+
+n_array = np.arange(0, 11)  # Quantum number range
+
+for n in n_array:
+
+    integral_result = gaussianQuadrature(g_func, N, a, b, n)[2]
+
+    # Calculate potential
+    potential = np.sqrt(integral_result) / 2
+    
+    print(f"Integral for n = {n} is {integral_result} \t Potential: {potential}")
+
+
+
+
+
+
+
+### Test
+
+def test(x, n):
+    return np.exp(-x**2)
 
 
 def g_func(z, n):
-    """After Change of variables"""
-    return f_func((z/(1-z))/((1-z)**2), n)
+    """After change of variables: z = x / (1 + x)"""
+    return test(np.tan(z), n) / np.cos(z)**2
 
-
-"""-1 to 0"""
-a1 = -1
-b1 = 0
-N = 100
-
-
-"""0 to 1"""
-a2 = 0
-b2 = 1
-
-
-"""Integral"""
-n_array = np.arange(0, 11)
-
-s = 0.0
 for n in n_array:
-
-    s += gaussianQuadrature(g_func, N, a1, b1, n)[2]
-    s += gaussianQuadrature(g_func, N, a2, b2, n)[2]
-
-    print(f"Integral for n = {n} is {s}")
-
-    s = 0.0
+    integral = gaussianQuadrature(g_func, 100, -np.pi/2, np.pi/2, n)[2]
+    print(f"Test integral result: {integral} == {np.sqrt(np.pi)}")
