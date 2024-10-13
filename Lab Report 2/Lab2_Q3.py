@@ -14,38 +14,6 @@ h_array = np.array([1e-16, 1e-15, 1e-14, 1e-13, 1e-12, 1e-11, 1e-10,
                     1e-4, 1e-3, 1e-2, 1e-1, 1e0])
 
 
-# Using the one given in the question paper
-
-# def central_difference(x_array, f_array):
-    
-#     deltax = x_array[1] - x_array[0]
-
-#     dfdx = np.zeros(len(x_array))
-
-#     # forward for start, backward for end
-#     dfdx[0] = (f_array[1] - f_array[0])/deltax
-#     dfdx[-1] = (f_array[-1] - f_array[-2])/deltax
-
-#     # for the rest
-#     for i in range(1, len(x_array)-1):
-#         dfdx[i] = (f_array[i+1] - f_array[i-1])/(2 * deltax)
-    
-#     return dfdx
-
-
-
-# """Part A"""
-
-# differential_array = np.zeros(len(h_array))
-# for i in range(len(h_array)):
-#     h = h_array[i]
-#     x_array = np.array([0.5-h, 0.5, 0.5+h])
-#     f_array = f(x_array)
-
-#     differential_array[i] = central_difference(x_array, f_array)[1]
-#     print(f"Differential at 1/2 for h = {h} is {differential_array[i]}")
-
-
 
 def central_difference(func, x, h):
     return (func(x + h/2) - func(x - h/2)) / h
@@ -108,7 +76,7 @@ plt.show()
 """Part F"""
 def g(x):
     # return np.exp(2*x)
-    return np.sin(x)
+    return np.exp(2*x)
 
 
 def higher_derivative(func, x, m, h):
