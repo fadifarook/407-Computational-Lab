@@ -1,6 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+'''Code for Q2: Extracts Opening value of S&P500 data from csv file.
+Does a check of accuracy of fft, and low-pass filter of all fluctuations 
+less than 6 months frequency'''
+
+
 # Change Font Size for Readability
 plt.rcParams.update({'font.size': 14})
 plt.figure(figsize=(10, 8))

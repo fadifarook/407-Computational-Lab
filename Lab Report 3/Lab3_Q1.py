@@ -3,6 +3,10 @@ from numpy import empty
 import numpy as np
 import matplotlib.pyplot as plt
 
+'''Code for Q1: Reads and audio file and filters all frequencies 
+greater than 880Hz. Saves many plots of the process.'''
+
+
 # Change Font Size for Readability
 plt.rcParams.update({'font.size': 14})
 

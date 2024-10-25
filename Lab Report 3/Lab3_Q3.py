@@ -1,6 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+'''Code for Q3: Plots Sea Level Pressure based on longitude and time
+Extracts wavenumber 3 and 5 in fourier space and plots then in longitude space'''
+
+
 # Change Font Size for Readability
 plt.rcParams.update({'font.size': 14})
 
