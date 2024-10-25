@@ -1,95 +1,76 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+# Change Font Size for Readability
+plt.rcParams.update({'font.size': 14})
+
+# Load all the data
+SLP = np.loadtxt('SLP.txt')
+Longitude = np.loadtxt('lon.txt')
+Times = np.loadtxt('times.txt')
 
 
-
-from numpy import loadtxt
-SLP = loadtxt('407-Computational-Lab/Lab Report 3/SLP.txt')
-Longitude = loadtxt('407-Computational-Lab/Lab Report 3/lon.txt')
-Times = loadtxt('407-Computational-Lab/Lab Report 3/times.txt')
-
-
-
-print(len(Times), len(Longitude))
-
-print(SLP.shape)
-
-
-print(Longitude[20] -Longitude[19])
-
-
-
-
+# Original Plot to visualize SLP
 plt.contourf(Longitude, Times, SLP, cmap='RdBu')
-plt.colorbar()
+plt.colorbar(label='Pressure [hPa]')
+plt.xlabel("Longitude [degrees]")
+plt.ylabel('Time [days]')
+plt.title("Deviation of SLP from Mean at $50^{\\circ}$ Latitude")
 plt.savefig("Lab3Q3a.png")
-plt.show()
-plt.clf()
-
-
-
-"""Do a 1D fourier transform in the longitudinal space"""
-SLP_fft = np.fft.rfft(SLP, axis=1)
-print(SLP_fft.shape)
-
-
-wavenumbers = np.fft.rfftfreq(len(Longitude), Longitude[1]-Longitude[0])
-print(len(wavenumbers))
-
-wavenumbers = np.arange(73)
-
-SLP_m3 = SLP_fft*0
-SLP_m5 = SLP_fft*0
-
-temp3 = SLP_fft[:, 3]  # time comes back
-temp5 = SLP_fft[:, 5]
-
-for i in range(73):
-    SLP_m3[:, 3] = temp3
-    SLP_m5[:, 5] = temp5
-
-print(SLP_m3.shape)
-
-# wavenumbers /= Longitude
-
-
-plt.contourf(wavenumbers, Times, np.abs(SLP_m3))   # Plot ABS
-plt.xlim(0, 6)
 # plt.show()
 plt.clf()
 
 
 
+''' Part A: Extract m=3 and m=5'''
+
+"""Do a 1D fourier transform in the longitudinal space"""
+SLP_fft = np.fft.rfft(SLP, axis=1)
+
+# Gets all the wavenumbers, only in the longitude fft
+wavenumbers = np.arange(len(SLP_fft[1,]))
+
+
+# Make two arrays, whose values are zero except 
+# at specific wavenumbers
+SLP_fft_m5 = SLP_fft.copy()
+SLP_fft_m3 = SLP_fft.copy()
+SLP_fft_m3[:, wavenumbers!=3] = 0
+SLP_fft_m5[:, wavenumbers!=5] = 0
 
 
 
-""" Filter and Return"""
+
+
+# Return to longitude space
+SLP_fltered3 = np.fft.irfft(SLP_fft_m3, axis=1)
+SLP_fltered5 = np.fft.irfft(SLP_fft_m5, axis=1)
 
 
 
-SLP_fltered3 = np.fft.irfft(SLP_m3, axis=1)
-SLP_fltered5 = np.fft.irfft(SLP_m5, axis=1)
-
-# print(SLP_fltered.shape)
-
-# Create a figure with two subplots
-fig, axs = plt.subplots(1, 2, figsize=(14, 6))
+'''Plot both m=3 and m=5 plots'''
+plt.figure(figsize=(14, 6))
+plt.suptitle("Filtered Deviation of SLP from Mean at $50^{\\circ}$ Latitude")
 
 # First subplot for SLP_fltered3
-contour1 = axs[0].contourf(Longitude, Times, SLP_fltered3, cmap='RdBu')
-axs[0].set_title('Filtered SLP - m = 3')
-axs[0].set_xlabel('Longitude')
-axs[0].set_ylabel('Time')
-fig.colorbar(contour1, ax=axs[0])
+plt.subplot(1, 2, 1)
+plt.contourf(Longitude, Times, SLP_fltered3, cmap='RdBu')
+plt.title('Wavenumber = 3 Only')
+plt.xlabel('Longitude [degrees]')
+plt.ylabel('Time [days]')
+plt.colorbar(label='Pressure [hPa]')
 
 # Second subplot for SLP_fltered5
-contour2 = axs[1].contourf(Longitude, Times, SLP_fltered5, cmap='RdBu')
-axs[1].set_title('Filtered SLP - m = 5')
-axs[1].set_xlabel('Longitude')
-fig.colorbar(contour2, ax=axs[1])
+plt.subplot(1, 2, 2)
+plt.contourf(Longitude, Times, SLP_fltered5, cmap='RdBu')
+plt.title('Wavenumber = 5 Only')
+plt.xlabel('Longitude [degrees]')
+plt.ylabel('Time [days]')
+plt.colorbar(label='Pressure [hPa]')
+
 
 # Show the plot
 plt.tight_layout()
 plt.savefig("Lab3Q3b.png")
-plt.show()
+# plt.show()
+plt.clf()
