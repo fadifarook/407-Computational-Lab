@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import time
 
 
 def LaplacianSolver(initial_phi, target, w=0):
@@ -62,7 +63,9 @@ initial_phi[:, -20] = -1  # 2cm from right is -1V
 
 """Part A: Relaxation Method"""
 # Calculate the potential
+start = time.time()
 phi_relaxed = LaplacianSolver(initial_phi, target)
+print("Time Taken for w = 0 is ", time.time() - start)
 
 plt.contourf(phi_relaxed, cmap="RdBu")
 plt.colorbar()
@@ -79,7 +82,9 @@ plt.clf()
 """w = 0.1"""
 
 # Calculate the potential
+start = time.time()
 phi_overrelaxed1 = LaplacianSolver(initial_phi, target, w=0.1)
+print("Time Taken for w = 0.1 is ", time.time() - start)
 
 plt.contourf(phi_overrelaxed1, cmap="RdBu")
 plt.colorbar()
@@ -94,7 +99,9 @@ plt.clf()
 """w=0.5"""
 
 # Calculate the potential
+start = time.time()
 phi_overrelaxed2 = LaplacianSolver(initial_phi, target, w=0.5)
+print("Time Taken for w = 0.5 is ", time.time() - start)
 
 plt.contourf(phi_overrelaxed2, cmap="RdBu")
 plt.colorbar()
@@ -113,7 +120,7 @@ X, Y = np.meshgrid(x, y)
 
 Ey, Ex = np.gradient(-phi_relaxed, y, x)
 
-strm = plt.streamplot(X, Y, Ex, Ey, color=phi_relaxed, linewidth=2, cmap="autumn")
+strm = plt.streamplot(X, Y, Ex, Ey, color=phi_relaxed, linewidth=2, cmap="RdBu")
 cbar = plt.colorbar(strm.lines)
 cbar.set_label("Potential $V$")
 plt.xlabel("x [mm]")

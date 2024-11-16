@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 # Initial Parameters
 L = 1  # Length [m]
 g = 9.81  # Acceleration due to gravity [m/s^2]
@@ -21,25 +20,16 @@ A = 0.002  # [m]
 mean = 0.5  # [m]
 sigma = 0.05  # [m]
 
-
 # Main arrays (at time 0)
 u = np.zeros(len(x))
 helper_value = np.exp(-((x - mean) ** 2) / (sigma**2))
 eta = H + A * helper_value - np.mean(A * helper_value)
 
+# Initialize the plot
+plt.figure(figsize=(10, 6))
 
 # Plot of eta vs x at time = 0
-plt.plot(x, eta)
-plt.xlabel("x [m]")
-plt.ylabel("eta [m]")
-plt.title("Free Surface Height vs x at t=0")
-plt.savefig("Lab4Q2a.png")
-# plt.show()
-plt.clf()
-
-
-"""DONT FORGET u BOUNDARY CONDISH"""
-
+plt.plot(x, eta, label="t=0s")
 
 """Implement FTCS method"""
 
@@ -86,19 +76,15 @@ while t < tend:
 
     # Now plot at appropriate times
     if abs(t - t1) < epsilon:
-        plt.plot(x, eta)
-        plt.xlabel("x [m]")
-        plt.ylabel("eta [m]")
-        plt.title("Free Surface Height vs x at t=1s")
-        plt.savefig("Lab4Q2b.png")
-        # plt.show()
-        plt.clf()
+        plt.plot(x, eta, label="t=1s")
 
     if abs(t - t2) < epsilon:
-        plt.plot(x, eta)
-        plt.xlabel("x [m]")
-        plt.ylabel("eta [m]")
-        plt.title("Free Surface Height vs x at t=4s")
-        plt.savefig("Lab4Q2c.png")
-        # plt.show()
-        plt.clf()
+        plt.plot(x, eta, label="t=4s")
+
+# Finalize the plot
+plt.xlabel("x [m]")
+plt.ylabel("eta [m]")
+plt.title("Free Surface Height vs x at Different Times")
+plt.legend()
+plt.savefig("Lab4Q2_combined.png")
+plt.show()

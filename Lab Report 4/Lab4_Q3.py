@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 # Initial Parameters
 epsilon = 1
 deltax = 0.02  # [m]
@@ -10,23 +9,16 @@ Lx = 2 * np.pi  # [m]
 
 Tf = 2  # [s]
 
-
 # Initial arrays (t = 0)
 x = np.arange(0, Lx, deltax)
 N = len(x) - 1
 u = np.sin(x)
 
+# Initialize the plot
+plt.figure(figsize=(10, 6))
+
 # Plot of u vs x at time = 0
-plt.plot(x, u)
-plt.xlabel("x [m]")
-plt.ylabel("u [m/s]")
-plt.title("u vs x at time 0")
-plt.savefig("Lab4Q3a.png")
-plt.clf()
-
-
-"""DONT FORGET u BOUNDARY CONDISH"""
-
+plt.plot(x, u, label="t=0s")
 
 """Implement FTCS method"""
 
@@ -60,28 +52,21 @@ while t < tend:
 
     # Plot of u vs x at specified times
     if abs(t - t1) < epsilon:
-        print(x[np.argmax(u2)])
-        plt.plot(x, u2)
-        plt.xlabel("x [m]")
-        plt.ylabel("u [m/s]")
-        plt.title("u vs x at time " + str(t1))
-        plt.savefig("Lab4Q3b.png")
-        plt.clf()
+        print(f"Max u2 at t={t1}: x = {x[np.argmax(u2)]}")
+        plt.plot(x, u2, label=f"t={t1}s")
 
     if abs(t - t2) < epsilon:
-        print(x[np.argmax(u2)])
-        plt.plot(x, u2)
-        plt.xlabel("x [m]")
-        plt.ylabel("u [m/s]")
-        plt.title("u vs x at time " + str(t2))
-        plt.savefig("Lab4Q3c.png")
-        plt.clf()
+        print(f"Max u2 at t={t2}: x = {x[np.argmax(u2)]}")
+        plt.plot(x, u2, label=f"t={t2}s")
 
     if abs(t - t3) < epsilon:
-        print(x[np.argmax(u2)])
-        plt.plot(x, u2)
-        plt.xlabel("x [m]")
-        plt.ylabel("u [m/s]")
-        plt.title("u vs x at time " + str(t3))
-        plt.savefig("Lab4Q3d.png")
-        plt.clf()
+        print(f"Max u2 at t={t3}: x = {x[np.argmax(u2)]}")
+        plt.plot(x, u2, label=f"t={t3}s")
+
+# Finalize the plot
+plt.xlabel("x [m]")
+plt.ylabel("u [m/s]")
+plt.title("u vs x at Different Times")
+plt.legend()
+plt.savefig("Lab4Q3_combined.png")
+plt.show()
