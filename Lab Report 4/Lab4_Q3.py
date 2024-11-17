@@ -1,12 +1,24 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+"""Code for Q3: Plots the fluid velocity using Leapfrog-like
+method. Initial wave is a gaussian that travels outward."""
+
+"""Part A and B"""
+
+plt.rcParams.update(
+    {"figure.figsize": [12, 8], "font.size": 16}
+)  # Large figure and font sizes
+
 # Initial Parameters
-epsilon = 1
-deltax = 0.02  # [m]
-deltat = 0.005  # [s]
+epsilon = 1  # constant
 Lx = 2 * np.pi  # [m]
 
+# Time and space steps
+deltax = 0.02  # [m]
+deltat = 0.005  # [s]
+
+# Final Time
 Tf = 2  # [s]
 
 # Initial arrays (t = 0)
@@ -22,7 +34,7 @@ plt.plot(x, u, label="t=0s")
 
 """Implement FTCS method"""
 
-beta = epsilon * deltat / deltax
+beta = epsilon * deltat / deltax  # helper variable
 
 # Time loop
 epsilon = deltat / 100
@@ -33,21 +45,24 @@ tend = Tf + epsilon
 
 t = 0
 
-# define two arrays for u
+# define two arrays for u, at time t and t + deltat
 u1 = u
-u2 = u - deltat * u * np.cos(x)
+u2 = u - deltat * u * np.cos(x)  # u(t + deltat) = u - deltat * u * derivative(u)
 
 while t < tend:
     t = t + deltat
 
-    # Boundary condition satisfy
+    # Boundary condition
     u1[0], u2[0], u1[-1], u2[-1] = 0, 0, 0, 0
 
+    # Helper variables
     u_new = np.zeros(len(x))
     u2_squared = u2**2
 
+    # Leapfrog-like equation
     u_new[1:N] = u1[1:N] - beta / 2 * (u2_squared[2 : N + 1] - u2_squared[0 : N - 1])
 
+    # Update, use in next iteration
     u1, u2 = u2.copy(), u_new.copy()
 
     # Plot of u vs x at specified times
@@ -64,9 +79,9 @@ while t < tend:
         plt.plot(x, u2, label=f"t={t3}s")
 
 # Finalize the plot
-plt.xlabel("x [m]")
-plt.ylabel("u [m/s]")
-plt.title("u vs x at Different Times")
+plt.xlabel("Position (x) [m]")
+plt.ylabel("Fluid Velocity (u) [m/s]")
+plt.title("Fluid Velocity vs Position at Various Times")
 plt.legend()
 plt.savefig("Lab4Q3_combined.png")
 plt.show()

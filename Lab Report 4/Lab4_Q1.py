@@ -2,6 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 
+"""Code for Q1: Plots the Potential Map and Electric Field
+associated with a parallel plate capacitor in a grounded box.
+Uses relaxation and overrelaxation methods coupled with Gauss-Seidel."""
+
+plt.rcParams.update(
+    {"figure.figsize": [12, 8], "font.size": 20}
+)  # Large figure and font sizes
+
 
 def LaplacianSolver(initial_phi, target, w=0):
     """
@@ -69,7 +77,7 @@ print("Time Taken for w = 0 is ", time.time() - start)
 
 plt.contourf(phi_relaxed, cmap="RdBu")
 plt.colorbar()
-plt.title("Potential Map of Capacitor")
+plt.title("Potential Map of Parallel Plate Capacitor (relaxation method)")
 plt.xlabel("x [mm]")
 plt.ylabel("y [mm]")
 # plt.show()
@@ -88,7 +96,7 @@ print("Time Taken for w = 0.1 is ", time.time() - start)
 
 plt.contourf(phi_overrelaxed1, cmap="RdBu")
 plt.colorbar()
-plt.title("Potential Map of Capacitor (w=0.1)")
+plt.title("Potential Map of Parallel Plate Capacitor (w=0.1)")
 plt.xlabel("x [mm]")
 plt.ylabel("y [mm]")
 # plt.show()
@@ -105,7 +113,7 @@ print("Time Taken for w = 0.5 is ", time.time() - start)
 
 plt.contourf(phi_overrelaxed2, cmap="RdBu")
 plt.colorbar()
-plt.title("Potential Map of Capacitor (w=0.5)")
+plt.title("Potential Map of Parallel Plate Capacitor (w=0.5)")
 plt.xlabel("x [mm]")
 plt.ylabel("y [mm]")
 # plt.show()
@@ -118,7 +126,7 @@ x = np.linspace(0, 100, 100)
 y = np.linspace(0, 100, 100)
 X, Y = np.meshgrid(x, y)
 
-Ey, Ex = np.gradient(-phi_relaxed, y, x)
+Ey, Ex = np.gradient(-phi_relaxed, y, x)  # E = -grad(phi)
 
 strm = plt.streamplot(X, Y, Ex, Ey, color=phi_relaxed, linewidth=2, cmap="RdBu")
 cbar = plt.colorbar(strm.lines)
