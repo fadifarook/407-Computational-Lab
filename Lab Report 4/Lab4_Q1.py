@@ -7,7 +7,7 @@ associated with a parallel plate capacitor in a grounded box.
 Uses relaxation and overrelaxation methods coupled with Gauss-Seidel."""
 
 plt.rcParams.update(
-    {"figure.figsize": [12, 8], "font.size": 20}
+    {"figure.figsize": [12, 8], "font.size": 24}
 )  # Large figure and font sizes
 
 
@@ -31,8 +31,12 @@ def LaplacianSolver(initial_phi, target, w=0):
         # Calculate new values of the potential
         for i in range(M - 1):
             for j in range(M - 1):
-                if i == 0 or i == M or j == 0 or j == M or j == 20 or j == 80:
-                    continue  # phi is the same
+                if i == 0 or i == M or j == 0 or j == M:
+                    continue  # phi is 0 at boundaries
+                elif (j == 80 and i in range(20, 80)) or (
+                    j == 20 and i in range(20, 80)
+                ):
+                    continue  # ignore the plates
                 else:
                     # main equation
                     if w:  # overrrlaxation
@@ -65,8 +69,8 @@ target = 1e-6  # Target accuracy
 
 # Create arrays to hold potential values
 initial_phi = np.zeros([M, M], float)
-initial_phi[:, 20] = 1  # 2cm from left is 1V
-initial_phi[:, -20] = -1  # 2cm from right is -1V
+initial_phi[20:80, 20] = 1  # 2cm from left is 1V, 6cm long
+initial_phi[20:80:, -20] = -1  # 2cm from right is -1V, 6cm long
 
 
 """Part A: Relaxation Method"""
@@ -76,8 +80,8 @@ phi_relaxed = LaplacianSolver(initial_phi, target)
 print("Time Taken for w = 0 is ", time.time() - start)
 
 plt.contourf(phi_relaxed, cmap="RdBu")
-plt.colorbar()
-plt.title("Potential Map of Parallel Plate Capacitor (relaxation method)")
+plt.colorbar(label="Potential [V]")
+plt.title("Potential Map of Parallel Plate Capacitor \n (relaxation method)")
 plt.xlabel("x [mm]")
 plt.ylabel("y [mm]")
 # plt.show()
@@ -95,7 +99,7 @@ phi_overrelaxed1 = LaplacianSolver(initial_phi, target, w=0.1)
 print("Time Taken for w = 0.1 is ", time.time() - start)
 
 plt.contourf(phi_overrelaxed1, cmap="RdBu")
-plt.colorbar()
+plt.colorbar(label="Potential [V]")
 plt.title("Potential Map of Parallel Plate Capacitor (w=0.1)")
 plt.xlabel("x [mm]")
 plt.ylabel("y [mm]")
@@ -112,7 +116,7 @@ phi_overrelaxed2 = LaplacianSolver(initial_phi, target, w=0.5)
 print("Time Taken for w = 0.5 is ", time.time() - start)
 
 plt.contourf(phi_overrelaxed2, cmap="RdBu")
-plt.colorbar()
+plt.colorbar(label="Potential [V]")
 plt.title("Potential Map of Parallel Plate Capacitor (w=0.5)")
 plt.xlabel("x [mm]")
 plt.ylabel("y [mm]")

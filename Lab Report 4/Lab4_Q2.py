@@ -19,7 +19,7 @@ deltax = 0.02  # [m]
 deltat = 0.01  # [s]
 
 # Space array and length
-x = np.arange(0, L, deltax)
+x = np.arange(0, L + deltax, deltax)
 J = len(x) - 1
 
 # Flat Bottom Topography
